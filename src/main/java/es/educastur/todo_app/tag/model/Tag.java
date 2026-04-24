@@ -23,6 +23,8 @@ public class Tag {
 
     private String text;
 
+    private String color;
+
     @Override
     public final boolean equals(Object o) {
         if (this == o) return true;

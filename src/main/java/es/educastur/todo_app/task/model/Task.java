@@ -35,6 +35,29 @@ public class Task {
     @Builder.Default
     private LocalDateTime createdAt = LocalDateTime.now();
 
+    private LocalDateTime deadline;
+
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private Priority priority = Priority.MEDIUM;
+
+    @Enumerated(EnumType.STRING)
+    @Builder.Default
+    private TaskStatus status = TaskStatus.PENDING;
+
+    @Builder.Default
+    private LocalDateTime updatedAt = LocalDateTime.now();
+
+    @PreUpdate
+    public void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    private boolean starred;
+
+    @Lob
+    private String notes;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "task_tag",
             joinColumns = @JoinColumn(name = "task_id"),
@@ -42,6 +65,7 @@ public class Task {
             inverseJoinColumns = @JoinColumn(name = "tag_id"),
             inverseForeignKey = @ForeignKey(name = "fk_task_tag_tag")
     )
+
     @Builder.Default
     @Setter(AccessLevel.NONE)
     private Set<Tag> tags = new HashSet<>();

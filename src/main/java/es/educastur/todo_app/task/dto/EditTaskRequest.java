@@ -2,6 +2,7 @@ package es.educastur.todo_app.task.dto;
 
 import es.educastur.todo_app.tag.model.Tag;
 import es.educastur.todo_app.task.model.Task;
+import es.educastur.todo_app.task.model.TaskStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,7 @@ public class EditTaskRequest extends CreateTaskRequest{
     private boolean completed;
     private LocalDateTime createdAt;
     private String username;
+    private TaskStatus status;
 
 
     public static EditTaskRequest of(Task task) {
@@ -34,6 +36,11 @@ public class EditTaskRequest extends CreateTaskRequest{
                 .description(task.getDescription())
                 .categoryId(task.getCategory().getId())
                 .tags(task.getTags().stream().map(Tag::getText).collect(Collectors.joining(", ")))
+                .deadline(task.getDeadline())
+                .priority(task.getPriority())
+                .status(task.getStatus())
+                .starred(task.isStarred())
+                .notes(task.getNotes())
                 .build();
     }
 

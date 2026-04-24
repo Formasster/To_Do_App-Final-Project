@@ -3,6 +3,7 @@ package es.educastur.todo_app.category.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import lombok.*;
 import org.hibernate.proxy.HibernateProxy;
 
@@ -22,6 +23,9 @@ public class Category {
     private Long id;
 
     private String title;
+
+    @Lob
+    private String description;
 
     @Override
     public final boolean equals(Object o) {

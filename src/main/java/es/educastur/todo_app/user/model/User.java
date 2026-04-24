@@ -3,6 +3,7 @@ package es.educastur.todo_app.user.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import lombok.*;
 import org.springframework.security.core.GrantedAuthority;
@@ -35,5 +36,7 @@ public class User implements UserDetails {
         return List.of(new SimpleGrantedAuthority("ROLE_" + role.name()));
     }
 
-
+    @Lob
+    private String bio;
+    
 }

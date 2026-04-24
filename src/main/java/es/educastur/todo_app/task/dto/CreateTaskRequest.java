@@ -1,5 +1,8 @@
 package es.educastur.todo_app.task.dto;
 
+import java.time.LocalDateTime;
+import es.educastur.todo_app.task.model.Priority;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -23,5 +26,10 @@ public class CreateTaskRequest {
     @NotNull(message = "{task.categoryId.notnull}")
     @Positive(message = "{task.categoryId.notnull}")
     protected Long categoryId;
+
+    protected LocalDateTime deadline;
+    protected Priority priority;
+    protected boolean starred;
+    protected String notes;
 
 }

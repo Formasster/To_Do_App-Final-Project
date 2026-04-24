@@ -8,7 +8,8 @@ public record UserResponse(
         String username,
         String fullname,
         String email,
-        String role
+        String role,
+        String bio
 ) {
 
     public static UserResponse of(User user) {
@@ -17,7 +18,9 @@ public record UserResponse(
                 user.getUsername(),
                 user.getFullname(),
                 user.getEmail(),
-                user.getRole().name()
+                user.getRole().name(),
+                user.getBio()
+
         );
     }
 }
