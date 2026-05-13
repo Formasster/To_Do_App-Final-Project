@@ -1,0 +1,26 @@
+package es.educastur.todo_app.DTOs;
+
+
+import es.educastur.todo_app.models.User;
+
+public record UserResponse(
+        Long id,
+        String username,
+        String fullname,
+        String email,
+        String role,
+        String bio
+) {
+
+    public static UserResponse of(User user) {
+        return new UserResponse(
+                user.getId(),
+                user.getUsername(),
+                user.getFullname(),
+                user.getEmail(),
+                user.getRole().name(),
+                user.getBio()
+
+        );
+    }
+}

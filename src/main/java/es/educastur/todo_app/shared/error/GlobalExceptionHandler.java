@@ -1,9 +1,10 @@
 package es.educastur.todo_app.shared.error;
 
-import es.educastur.todo_app.task.exception.EmptyTaskListException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import es.educastur.todo_app.exception.EmptyTaskListException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {

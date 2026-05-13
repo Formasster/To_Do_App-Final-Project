@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>EverTask</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;600&family=Source+Sans+3:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/main.css" rel="stylesheet" />
+</head>
+<body class="d-flex flex-column h-100">
+
+<nav class="navbar navbar-expand navbar-dark" aria-label="Navegación principal">
+    <div class="container-fluid">
+        <h1 class="d-flex align-items-center fs-4 text-white mb-0">
+            <img src="/img/logo.png" width="36" height="36" class="me-3 th-logo" alt="EverTask logo">
+            EverTask
+        </h1>
+        <div class="collapse navbar-collapse navbar-options">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/tasks.html">Inicio</a>
+                </li>
+                <li class="nav-item" id="navTasks" style="display:none">
+                    <a class="nav-link" href="/tasks.html">Tareas</a>
+                </li>
+                <li class="nav-item" id="navAdmin" style="display:none">
+                    <a class="nav-link" href="/admin.html">Admin</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item dropdown" id="navUser" style="display:none">
+                    <a class="nav-link dropdown-toggle" href="#" id="dropdown03"
+                       data-bs-toggle="dropdown" aria-expanded="false" id="userFullname">Usuario</a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdown03">
+                        <li>
+                            <a class="dropdown-item" href="#" onclick="logout()">Cerrar sesión</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item" id="navLogin">
+                    <a class="nav-link" href="/login.html">Iniciar sesión</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<main class="flex-shrink-0">
+    <div class="container">
+        <!-- Contenido de la página -->
+    </div>
+</main>
+
+<footer class="footer mt-auto py-3 bg-light fixed-bottom">
+    <div class="container">
+        <span class="text-muted">EverTask - Alesia Rubtsova</span>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    // Carga el usuario actual y muestra/oculta elementos del navbar según su rol
+    async function loadNavbar() {
+        try {
+            const response = await fetch('/api/auth/me');
+            if (!response.ok) {
+                // No autenticado
+                document.getElementById('navLogin').style.display = 'block';
+                document.getElementById('navUser').style.display = 'none';
+                return;
+            }
+            const user = await response.json();
+
+            // Mostramos el nombre del usuario
+            document.getElementById('userFullname').textContent = user.fullname;
+
+            // Mostramos elementos de usuario autenticado
+            document.getElementById('navTasks').style.display = 'block';
+            document.getElementById('navUser').style.display = 'block';
+            document.getElementById('navLogin').style.display = 'none';
+
+            // Si es admin mostramos el enlace de admin
+            if (user.role === 'ADMIN') {
+                document.getElementById('navAdmin').style.display = 'block';
+            }
+        } catch (error) {
+            console.error('Error cargando navbar:', error);
+        }
+    }
+
+    async function logout() {
+        await fetch('/logout', { method: 'POST' });
+        window.location.href = '/login.html';
+    }
+
+    loadNavbar();
+</script>
+</body>
+</html>

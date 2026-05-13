@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Iniciar sesión - EverTask</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;600&family=Source+Sans+3:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/main.css" rel="stylesheet" />
+</head>
+<body class="text-center">
+
+<main class="form-signin">
+    <form method="POST" action="/login">
+        <img class="mb-3 th-logo-lg" src="/img/logo.png" alt="EverTask logo">
+        <h1 class="h3 mb-1 fw-normal" style="font-family: 'Fira Sans', sans-serif;">EverTask</h1>
+        <p class="text-muted mb-4" style="font-size: 14px;">Inicia sesión para continuar</p>
+
+        <div id="errorAlert" class="alert alert-danger alert-dismissible fade show d-none" role="alert">
+            <strong>Error</strong> Usuario o contraseña incorrectos
+            <button type="button" class="btn-close"
+                onclick="this.parentElement.classList.add('d-none')"></button>
+        </div>
+
+        <div class="form-floating">
+            <input type="text" name="username" class="form-control"
+                id="username" placeholder="Usuario">
+            <label for="username">Usuario</label>
+        </div>
+        <div class="form-floating">
+            <input type="password" name="password" class="form-control"
+                id="password" placeholder="Contraseña">
+            <label for="password">Contraseña</label>
+        </div>
+
+        <button class="w-100 btn btn-lg btn-primary mt-3" type="submit">Entrar</button>
+        <a class="w-100 btn btn-lg btn-outline-secondary mt-2" href="/register.html">
+            Registrarse
+        </a>
+    </form>
+</main>
+
+<footer class="footer mt-auto py-3 bg-light fixed-bottom">
+    <div class="container">
+        <span class="text-muted">EverTask - Alesia Rubtsova</span>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    if (window.location.search.includes('error=true')) {
+        document.getElementById('errorAlert').classList.remove('d-none');
+    }
+</script>
+</body>
+</html>
