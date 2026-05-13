@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  mysql-db:
+    image: mysql:8.0
+    container_name: todo-mysql
+    environment:
+      MYSQL_DATABASE: todoapp
+      MYSQL_ROOT_PASSWORD: Yakumu87
+    ports:
+      - "3306:3306"
+
+  todo-app:
+    build: .
+    container_name: todo-backend
+    ports:
+      - "8080:8080"
+    environment:
+      DB_URL: jdbc:mysql://mysql-db:3306/todoapp
+      DB_USERNAME: root
+      DB_PASSWORD: Yakumu87
+    depends_on:
+      - mysql-db

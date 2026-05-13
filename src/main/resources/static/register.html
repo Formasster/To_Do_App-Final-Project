@@ -107,8 +107,9 @@
                 document.getElementById('successAlert').classList.remove('d-none');
                 setTimeout(() => window.location.href = '/login.html', 1500);
             } else {
+                const errorData = await response.json();
                 const errorAlert = document.getElementById('errorAlert');
-                errorAlert.textContent = 'Error al registrar. Comprueba los datos.';
+                errorAlert.textContent = errorData.message || 'Error al registrar. Comprueba los datos.';
                 errorAlert.classList.remove('d-none');
             }
         } catch (error) {

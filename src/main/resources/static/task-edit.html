@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Editar Tarea - EverTask</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/main.css" rel="stylesheet" />
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-dark bg-primary mb-4">
+    <div class="container-fluid">
+        <span class="navbar-brand mb-0 h1">EverTask - Edición</span>
+        <a href="/task-list.html" class="btn btn-outline-light btn-sm">Volver al listado</a>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm rounded-3">
+                <div class="card-body p-4">
+                    <h2 class="h4 mb-4">Modificar Tarea</h2>
+                    <form id="editTaskForm">
+                        <input type="hidden" id="taskId">
+                        
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Título</label>
+                            <input type="text" id="editTitle" class="form-control" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Descripción</label>
+                            <textarea id="editDesc" class="form-control" rows="3"></textarea>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Prioridad</label>
+                                <select id="editPriority" class="form-select">
+                                    <option value="LOW">Baja</option>
+                                    <option value="MEDIUM">Media</option>
+                                    <option value="HIGH">Alta</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label fw-bold">Estado</label>
+                                <select id="editStatus" class="form-select">
+                                    <option value="PENDING">Pendiente</option>
+                                    <option value="IN_PROGRESS">En progreso</option>
+                                    <option value="COMPLETED">Completada</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Notas Adicionales</label>
+                            <textarea id="editNotes" class="form-control" rows="2" placeholder="Notas privadas..."></textarea>
+                        </div>
+
+                        <div class="form-check mb-4">
+                            <input class="form-check-input" type="checkbox" id="editStarred">
+                            <label class="form-check-label" for="editStarred">⭐ Tarea destacada</label>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">Actualizar Tarea</button>
+                            <button type="button" class="btn btn-outline-danger" onclick="deleteTask()">Eliminar Definitivamente</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // 1. Obtener el ID de la tarea desde la URL (?id=X)
+    const urlParams = new URLSearchParams(window.location.search);
+    const taskId = urlParams.get('id');
+
+    // 2. Cargar los datos actuales de la tarea al abrir la página
+    async function loadTask() {
+        if (!taskId) { window.location.href = '/task-list.html'; return; }
+        
+        try {
+            const response = await fetch(`/api/tasks/${taskId}`);
+            if (!response.ok) throw new Error();
+            
+            const task = await response.json();
+            
+            // Rellenar el formulario con los datos del Back-end
+            document.getElementById('taskId').value = task.id;
+            document.getElementById('editTitle').value = task.title;
+            document.getElementById('editDesc').value = task.description || '';
+            document.getElementById('editPriority').value = task.priority;
+            document.getElementById('editStatus').value = task.status;
+            document.getElementById('editNotes').value = task.notes || '';
+            document.getElementById('editStarred').checked = task.starred;
+        } catch (error) {
+            alert("No tienes permiso para ver esta tarea o no existe.");
+            window.location.href = '/task-list.html';
+        }
+    }
+
+    // 3. Enviar los cambios (PUT)
+    document.getElementById('editTaskForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const updatedData = {
+            title: document.getElementById('editTitle').value,
+            description: document.getElementById('editDesc').value,
+            priority: document.getElementById('editPriority').value,
+            status: document.getElementById('editStatus').value,
+            notes: document.getElementById('editNotes').value,
+            starred: document.getElementById('editStarred').checked
+        };
+
+        const response = await fetch(`/api/tasks/${taskId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updatedData)
+        });
+
+        if (response.ok) {
+            window.location.href = '/task-list.html';
+        } else {
+            alert("Error al guardar los cambios.");
+        }
+    });
+
+    async function deleteTask() {
+        if (confirm('¿Estás segura de borrar esta tarea?')) {
+            const res = await fetch(`/api/tasks/${taskId}`, { method: 'DELETE' });
+            if (res.ok) window.location.href = '/task-list.html';
+        }
+    }
+
+    loadTask();
+</script>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard - EverTask</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/main.css" rel="stylesheet" />
+</head>
+<body class="bg-light">
+
+<nav class="navbar navbar-dark bg-primary mb-4">
+    <div class="container-fluid">
+        <a class="navbar-brand h1 mb-0" href="/task-list.html">EverTask</a>
+        <div class="d-flex">
+            <span class="navbar-text me-3" id="userNameDisplay">Usuario</span>
+            <a href="/task-list.html" class="btn btn-outline-light btn-sm">Mis Tareas</a>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <h2 class="mb-4">Mi Resumen</h2>
+    <div class="row g-4">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm text-center p-3">
+                <div class="card-body">
+                    <h5 class="text-muted">Total Tareas</h5>
+                    <p class="display-5 fw-bold" id="statTotal">0</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm text-center p-3 border-start border-success border-5">
+                <div class="card-body">
+                    <h5 class="text-muted">Completadas</h5>
+                    <p class="display-5 fw-bold text-success" id="statCompleted">0</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm text-center p-3 border-start border-warning border-5">
+                <div class="card-body">
+                    <h5 class="text-muted">Pendientes</h5>
+                    <p class="display-5 fw-bold text-warning" id="statPending">0</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm text-center p-3 border-start border-danger border-5">
+                <div class="card-body">
+                    <h5 class="text-muted">Vencidas</h5>
+                    <p class="display-5 fw-bold text-danger" id="statOverdue">0</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    async function loadStats() {
+        // 1. Cargar nombre de usuario 
+        const authRes = await fetch('/api/auth/me');
+        if (authRes.ok) {
+            const user = await authRes.json();
+            document.getElementById('userNameDisplay').textContent = user.fullname;
+        }
+
+        // 2. Cargar estadísticas del Dashboard
+        const statsRes = await fetch('/api/tasks/dashboard');
+        if (statsRes.ok) {
+            const data = await statsRes.json();
+            document.getElementById('statTotal').textContent = data.totalTasks;
+            document.getElementById('statCompleted').textContent = data.completedTasks;
+            document.getElementById('statPending').textContent = data.pendingTasks;
+            document.getElementById('statOverdue').textContent = data.overdueTasks;
+        }
+    }
+
+    loadStats();
+</script>
+</body>
+</html>

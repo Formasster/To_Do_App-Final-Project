@@ -189,7 +189,7 @@
 
     async function loadCategories() {
         try {
-            const res = await fetch('/api/admin/categories');
+            const res = await fetch('/api/categories');
             if (!res.ok) return;
             const categories = await res.json();
             const select = document.getElementById('taskCategory');
@@ -208,7 +208,7 @@
 
     async function loadTasks() {
         try {
-            const res = await fetch('/api/tasks');
+            const res = await fetch('/api/task');
             const tbody = document.getElementById('taskTableBody');
             tbody.innerHTML = '';
 
@@ -275,7 +275,7 @@
         };
 
         try {
-            const res = await fetch('/api/tasks', {
+            const res = await fetch('/api/task', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(data)
@@ -297,13 +297,13 @@
     // ── Acciones ────────────────────────────────────────────────────────────
 
     async function toggleTask(id) {
-        await fetch(`/api/tasks/${id}/toggle`, { method: 'PATCH' });
+        await fetch(`/api/task/${id}/toggle`, { method: 'PATCH' });
         loadTasks();
     }
 
     async function deleteTask(id) {
         if (!confirm('¿Seguro que quieres eliminar esta tarea?')) return;
-        await fetch(`/api/tasks/${id}`, { method: 'DELETE' });
+        await fetch(`/api/task/${id}`, { method: 'DELETE' });
         loadTasks();
     }
 
